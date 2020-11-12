@@ -100,19 +100,28 @@ plt.bar(range(0,6),model.explained_variance_)
 
 # Use ggplot() to plot PC2 vs PC1, and color by the cluster assignment
 # View the resulting plot
-p1 = plt.scatter(my_pc[0],my_pc[1], c = my_pc['cluster'])
-plt.title('PC1 vs PC2')
-plt.legend(my_pc['cluster'])
-p2 = plt.scatter(my_pc[1],my_pc[2], c = my_pc['cluster'])
-plt.title('PC2 vs PC3')
-p2 = plt.scatter(my_pc[0],my_pc[2], c = my_pc['cluster'])
-plt.title('PC1 vs PC3')
+fig, (p1, p2, p3) = plt.subplots(nrows=1, ncols=3, figsize=(18, 6))
 
+
+sns.scatterplot(my_pc[0],my_pc[1], hue = my_pc['cluster'], ax = p1,
+                palette='tab10')
+#p1.scatter(my_pc[0],my_pc[1], c = my_pc['cluster'], label = my_pc['cluster'])
+p1.set_title('PC1 vs PC2')
+sns.scatterplot(my_pc[1],my_pc[2], hue = my_pc['cluster'], ax = p2,
+                palette='tab10')
+#p2.scatter(my_pc[1],my_pc[2], c = my_pc['cluster'])
+p2.set_title('PC2 vs PC3')
+sns.scatterplot(my_pc[0],my_pc[2], hue = my_pc['cluster'], ax = p3,
+                palette='tab10')
+#p3.scatter(my_pc[0],my_pc[2], c = my_pc['cluster'])
+p3.set_title('PC1 vs PC3')
+
+plt.tight_layout()
+plt.show()
 #Task 9
 # Assign cluster names to clusters 1 through 5 in order
-cluster_names = ['Risky Commoners','High Rollers','Risk Takers','Cautious Commoners','Stratigic Addicts']
+cluster_names = {0:'Risky Commoners',1:'High Rollers',2:'Risk Takers',3:'Cautious Commoners',4:'Stratigic Addicts'}
 # Append the cluster names to the cluster means table
-bustabit_clus_avg_named = bustabit_clus_avg.reset_index(cluster_names,level=0)
-bustabit_clus_avg_named.index = cluster_names
+bustabit_clus_avg_named = bustabit_clus_avg.rename(cluster_names)
 # View the cluster means table with your appended cluster names
 bustabit_clus_avg_named
