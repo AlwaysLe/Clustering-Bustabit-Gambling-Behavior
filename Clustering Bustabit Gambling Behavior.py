@@ -1,6 +1,8 @@
 # Load
 import pandas as pd
 from scipy.cluster.vq import kmeans, vq
+from scipy.cluster.hierarchy import linkage
+from scipy.cluster.hierarchy import fcluster
 import numpy as np
 import matplotlib.pyplot as plt
 from pandas.plotting import parallel_coordinates
@@ -51,8 +53,17 @@ bustabit_standardized = bustabit_clus.apply(lambda x: mean_sd_standard(x), axis=
 # Summarize our standardized data
 bustabit_standardized.describe()
 
+#Task 5.0 Hierarchy clustering
+mergings = linkage(bustabit_standardized, method='complete')
+hc_labels = fcluster(mergings, 5, criterion = 'maxclust')
+hc_pairs = bustabit_standardized.copy()
+hc_pairs['label'] = hc_labels
+g = sns.PairGrid(data =bustabit_standardized.iloc[:,0:5])
+g.map(sns.scatterplot)
 
-#Task 5
+hc_pairs['label'].value_counts()
+
+#Task 5.1 Kmeans
 # Choose 20190101 as our random seed
 np.random.seed(20190101)
 # Cluster the players using kmeans with five clusters
